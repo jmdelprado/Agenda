@@ -238,6 +238,7 @@ button[type="submit"]:hover:not(:disabled) {
    ============================================================ */
 .auth-page {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -306,4 +307,70 @@ button[type="submit"]:hover:not(:disabled) {
 
 .auth-page > p a:hover {
   text-decoration: underline;
+}
+
+/* ============================================================
+   Responsive — móvil y tablet
+   ============================================================ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+/* pantallas táctiles: objetivos de pulsación cómodos */
+@media (pointer: coarse) {
+  button {
+    min-height: 2.5rem;
+  }
+
+  .planner__mini-day {
+    min-height: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  /* 16px evita que iOS haga zoom al enfocar un campo */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="datetime-local"],
+  input:not([type]),
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-page {
+    padding: 1.5rem 0.9rem;
+  }
+
+  .auth-page form {
+    padding: 1.35rem;
+  }
+}
+
+/* cabecera compacta en móvil: logo y botones en la misma fila */
+@media (max-width: 640px) {
+  .app-header .app-header__actions {
+    gap: 0.4rem;
+  }
+
+  .app-header .app-header__actions button {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.55rem;
+    min-height: 2.25rem;
+  }
 }

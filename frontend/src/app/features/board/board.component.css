@@ -148,14 +148,22 @@
   white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-  .board-page {
-    padding: 1rem 0.75rem 2rem;
+@media (max-width: 768px) {
+  .board {
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
 
   .board__column,
   .board__add-column {
-    width: 250px;
-    min-width: 250px;
+    width: min(82vw, 290px);
+    min-width: min(82vw, 290px);
+    scroll-snap-align: start;
+  }
+}
+
+@media (max-width: 480px) {
+  .board-page {
+    padding: 1rem 0.75rem 2rem;
   }
 }
