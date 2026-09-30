@@ -165,3 +165,10 @@
     width: 7rem;
   }
 }
+
+@media (max-width: 640px) {
+  .workspace-tabs {
+    padding: 0.5rem 0.9rem 0;
+    scroll-snap-type: x proximity;
+  }
+}

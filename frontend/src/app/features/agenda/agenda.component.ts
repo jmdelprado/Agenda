@@ -458,6 +458,11 @@ export class AgendaComponent {
     if (!target || !container) {
       return;
     }
+    if (getComputedStyle(container).flexDirection === 'row') {
+      const left = target.offsetLeft - container.clientWidth / 2 + target.clientWidth / 2;
+      container.scrollTo({ left, behavior: 'smooth' });
+      return;
+    }
     const offset = target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2;
     container.scrollTo({ top: offset, behavior: 'smooth' });
   }
