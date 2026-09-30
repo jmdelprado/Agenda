@@ -1,4 +1,4 @@
-# Agenda — Flujo de trabajo con ramas
+guarda el # Agenda — Flujo de trabajo con ramas
 
 Repositorio: https://github.com/jmdelprado/Agenda
 
@@ -22,3 +22,12 @@ Repositorio: https://github.com/jmdelprado/Agenda
 - No hacer push, merge ni force-push sin que el usuario lo haya pedido. Ante la duda sobre a qué rama va un cambio, preguntar.
 - Nunca reescribir historial (`--force`, `reset --hard`) en `develop` ni `produccion`.
 - Commits: mensajes claros y descriptivos.
+
+## Planificación (specs)
+
+Las funcionalidades se planifican en `specs/` (metodología spec-kit). Antes de desarrollar, leer la spec y las tareas correspondientes.
+
+- `specs/001-kanban-agenda-workspaces/`: tablero Kanban, agenda con recordatorios y espacios de trabajo (backend Spring Boot hexagonal + frontend Angular).
+- `specs/002-importar-eventos-x/`: **pendiente de desarrollar**. Leer cuentas de X (5-6), detectar eventos con fecha y crearlos como tareas con `dueAt` en el calendario de la agenda. Fase 1 asistida desde Chrome (sin cambios de backend); fase 2 opcional con automatización. Rama: `feature/importar-eventos-x`.
+
+Reglas para esta feature: no inventar fechas (los casos ambiguos se preguntan al usuario), pedir confirmación antes de crear tareas y respetar las condiciones de uso de X.
