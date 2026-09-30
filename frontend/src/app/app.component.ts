@@ -25,6 +25,7 @@ export class AppComponent {
   private readonly router = inject(Router);
 
   readonly isAuthenticated = this.authService.isAuthenticated;
+  readonly isWorkAccount = this.authService.isWorkAccount;
 
   logout(): void {
     this.authService.logout();

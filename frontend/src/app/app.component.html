@@ -9,7 +9,11 @@
 
     <nav class="app-header__nav">
       <a routerLink="/agenda" routerLinkActive="is-active">Agenda</a>
-      <a routerLink="/board" routerLinkActive="is-active">Tablero</a>
+      @if (isWorkAccount()) {
+        <a routerLink="/board" routerLinkActive="is-active">Tablero</a>
+      } @else {
+        <a routerLink="/eventos" routerLinkActive="is-active">Eventos</a>
+      }
     </nav>
 
     <div class="app-header__actions">

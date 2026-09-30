@@ -964,15 +964,26 @@
   min-width: 0;
 }
 
-@media (max-width: 900px) {
+/* tablet: el carril de meses pasa a una tira horizontal y el libro conserva el panel de pendientes al lado */
+@media (max-width: 1024px) {
   .planner__layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr) 240px;
   }
 
   .planner__months {
+    grid-column: 1 / -1;
+    flex-direction: row;
     position: static;
-    order: -1;
-    max-height: 16rem;
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0.1rem 0.1rem 0.6rem;
+    scroll-snap-type: x proximity;
+  }
+
+  .planner__mini-month {
+    flex: 0 0 12.5rem;
+    scroll-snap-align: start;
   }
 
   .planner__book {
@@ -981,6 +992,37 @@
 
   .planner__pending {
     position: static;
+  }
+}
+
+/* móvil: una sola columna */
+@media (max-width: 720px) {
+  .planner__layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .planner {
+    padding-top: 1.25rem;
+  }
+
+  .planner__toolbar h1 {
+    font-size: 1.5rem;
+  }
+
+  .planner__mini-month {
+    flex-basis: 11.5rem;
+  }
+
+  .planner__mini-day {
+    min-height: 1.7rem;
+  }
+
+  .planner__page-head {
+    flex-wrap: wrap;
+  }
+
+  .planner__notes {
+    font-size: 16px;
   }
 }
 

@@ -14,3 +14,11 @@ export const authGuard: CanActivateFn = () => {
 
   return router.parseUrl('/login');
 };
+
+/** Solo las cuentas de trabajo tienen tablero; el resto vuelve a la agenda. */
+export const workAccountGuard: CanActivateFn = () => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  return authService.isWorkAccount() ? true : router.parseUrl('/agenda');
+};

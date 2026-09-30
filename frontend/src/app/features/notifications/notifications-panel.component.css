@@ -98,3 +98,19 @@
   font-size: 0.7rem;
   color: var(--muted);
 }
+
+@media (max-width: 640px) {
+  /* en móvil el desplegable ocupa el ancho de la pantalla en vez de salirse por la izquierda */
+  .notifications-panel {
+    position: static;
+  }
+
+  .notifications-panel__dropdown {
+    position: fixed;
+    left: 0.75rem;
+    right: 0.75rem;
+    top: 3.6rem;
+    width: auto;
+    max-height: 70vh;
+  }
+}
