@@ -3,6 +3,13 @@
   command = "npm run build"
   publish = "dist/frontend/browser"
 
+# Sustituye TU-BACKEND por el dominio de Render (p. ej. agenda-backend.onrender.com)
+[[redirects]]
+  from = "/api/*"
+  to = "https://TU-BACKEND.onrender.com/api/:splat"
+  status = 200
+  force = true
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
