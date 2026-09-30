@@ -33,6 +33,15 @@ export class AuthService {
   private readonly accessTokenSignal = signal<string | null>(this.readToken(ACCESS_TOKEN_KEY));
   readonly isAuthenticated = computed(() => this.accessTokenSignal() !== null);
 
+  /** Email del usuario, leído del claim `email` del access token. */
+  readonly email = computed(() => this.readEmailClaim(this.accessTokenSignal()));
+
+  /** Agenda de trabajo (con tablero) si el dominio del email contiene "nter"; si no, agenda personal. */
+  readonly isWorkAccount = computed(() => {
+    const domain = this.email()?.split('@')[1]?.toLowerCase() ?? '';
+    return domain.includes('nter');
+  });
+
   /** Refresco en curso compartido: evita que varias peticiones en paralelo (T068: tablero,
    * agenda, notificaciones...) disparen cada una su propio refresh cuando el access token
    * caduca (15 min) — el refresh token rota en cada llamada, así que la segunda invalidaría a
@@ -98,6 +107,19 @@ export class AuthService {
   private storeAccessToken(accessToken: string): void {
     this.writeToken(ACCESS_TOKEN_KEY, accessToken);
     this.accessTokenSignal.set(accessToken);
+  }
+
+  private readEmailClaim(token: string | null): string | null {
+    if (!token) {
+      return null;
+    }
+    try {
+      const payload = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const claims = JSON.parse(decodeURIComponent(escape(atob(payload))));
+      return typeof claims.email === 'string' ? claims.email : null;
+    } catch {
+      return null;
+    }
   }
 
   private readToken(key: string): string | null {

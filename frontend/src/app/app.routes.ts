@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { authGuard } from './core/guards/auth.guard';
+import { authGuard, workAccountGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'agenda' },
@@ -22,9 +22,15 @@ export const routes: Routes = [
   },
   {
     path: 'board',
-    canActivate: [authGuard],
+    canActivate: [authGuard, workAccountGuard],
     loadComponent: () =>
       import('./features/board/board.component').then((m) => m.BoardComponent),
+  },
+  {
+    path: 'eventos',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/eventos/eventos.component').then((m) => m.EventosComponent),
   },
   { path: '**', redirectTo: 'agenda' },
 ];
