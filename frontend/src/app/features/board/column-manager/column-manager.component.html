@@ -1,0 +1,22 @@
+<div class="column-manager">
+  @if (!renaming()) {
+    <div class="column-manager__actions">
+      <button type="button" (click)="startRename()" title="Renombrar columna">✏️</button>
+      <button type="button" (click)="delete()" title="Eliminar columna">🗑️</button>
+    </div>
+  } @else {
+    <div class="column-manager__rename">
+      <input
+        type="text"
+        [ngModel]="draftName()"
+        (ngModelChange)="draftName.set($event)"
+        (keyup.enter)="saveRename()"
+      />
+      <button type="button" (click)="saveRename()">Guardar</button>
+      <button type="button" (click)="cancelRename()">Cancelar</button>
+    </div>
+  }
+  @if (errorMessage()) {
+    <p class="column-manager__error">{{ errorMessage() }}</p>
+  }
+</div>

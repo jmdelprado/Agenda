@@ -1,0 +1,161 @@
+.board-page {
+  padding: 1.5rem 1.25rem 3rem;
+  max-width: 100%;
+}
+
+.board-page h1 {
+  margin-bottom: 1.1rem;
+}
+
+.board-page__error {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.8rem;
+  max-width: 480px;
+}
+
+.board {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* each column carries its own index colour from the shared tab palette —
+   the same visual language as the workspace folder tabs above. */
+.board__column {
+  --col-color: var(--tab-1);
+  --col-color-soft: var(--tab-1-soft);
+  background: var(--surface-alt);
+  border: 1px solid var(--border-soft);
+  border-top: 3px solid var(--col-color);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  width: 290px;
+  min-width: 290px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.board__column:nth-of-type(4n + 1) {
+  --col-color: var(--tab-1);
+  --col-color-soft: var(--tab-1-soft);
+}
+
+.board__column:nth-of-type(4n + 2) {
+  --col-color: var(--tab-2);
+  --col-color-soft: var(--tab-2-soft);
+}
+
+.board__column:nth-of-type(4n + 3) {
+  --col-color: var(--tab-3);
+  --col-color-soft: var(--tab-3-soft);
+}
+
+.board__column:nth-of-type(4n + 4) {
+  --col-color: var(--tab-4);
+  --col-color-soft: var(--tab-4-soft);
+}
+
+.board__column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.board__column-header h2 {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ink-900);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+
+.board__task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-height: 44px;
+}
+
+.board__task-list:empty::after {
+  content: "Sin tarjetas todavía";
+  font-size: 0.78rem;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.board__add-task,
+.board__add-column {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.board__add-task input,
+.board__add-column input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.86rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.board__add-task button,
+.board__add-column button {
+  font-size: 0.78rem;
+  padding: 0.4rem 0.65rem;
+}
+
+.board__add-column {
+  min-width: 290px;
+  align-items: center;
+  background: transparent;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  align-self: flex-start;
+}
+
+.cdk-drag-preview {
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-sm);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.cdk-drop-list-dragging .board__task-list > *:not(.cdk-drag-placeholder) {
+  transition: transform 150ms ease;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .board-page {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .board__column,
+  .board__add-column {
+    width: 250px;
+    min-width: 250px;
+  }
+}

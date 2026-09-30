@@ -1,0 +1,42 @@
+.column-manager__actions {
+  display: flex;
+  gap: 0.15rem;
+}
+
+.column-manager__actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.2rem 0.35rem;
+  border-radius: 5px;
+  line-height: 1;
+  opacity: 0.55;
+}
+
+.column-manager__actions button:hover {
+  opacity: 1;
+  background: rgba(16, 25, 43, 0.06);
+}
+
+.column-manager__rename {
+  display: flex;
+  gap: 0.3rem;
+}
+
+.column-manager__rename input {
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  width: 8.5rem;
+}
+
+.column-manager__rename button {
+  font-size: 0.75rem;
+  padding: 0.3rem 0.5rem;
+}
+
+.column-manager__error {
+  color: var(--danger);
+  font-size: 0.75rem;
+  margin: 0.2rem 0 0;
+}

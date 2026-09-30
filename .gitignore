@@ -1,0 +1,12 @@
+﻿node_modules/
+.angular/
+dist/
+target/
+build/
+*.class
+*.log
+.env
+.env.*
+.idea/
+.vscode/
+.claude/settings.local.json

@@ -1,0 +1,131 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 0.65rem 1.25rem;
+  background: var(--ink-900);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), var(--shadow-md);
+}
+
+.app-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: #fff;
+}
+
+.app-header__mark {
+  display: inline-flex;
+  gap: 3px;
+  padding: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+}
+
+.app-header__mark span {
+  display: block;
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--tab-2);
+}
+
+.app-header__mark span:nth-child(1) {
+  background: var(--tab-1);
+  height: 10px;
+  align-self: flex-end;
+}
+
+.app-header__mark span:nth-child(2) {
+  background: var(--tab-2);
+  height: 16px;
+}
+
+.app-header__mark span:nth-child(3) {
+  background: var(--tab-4);
+  height: 8px;
+  align-self: flex-end;
+}
+
+.app-header__wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1;
+}
+
+.app-header__nav a {
+  position: relative;
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.35rem 0.1rem;
+  transition: color 120ms ease;
+}
+
+.app-header__nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transition: transform 150ms ease;
+}
+
+.app-header__nav a:hover {
+  color: #fff;
+}
+
+.app-header__nav a.is-active {
+  color: #fff;
+}
+
+.app-header__nav a.is-active::after {
+  transform: scaleX(1);
+}
+
+.app-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app-header__logout {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.app-header__logout:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .app-header {
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+  }
+
+  .app-header__nav {
+    order: 3;
+    width: 100%;
+    gap: 1rem;
+  }
+}

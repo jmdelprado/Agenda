@@ -1,0 +1,341 @@
+<div class="planner">
+  <div class="planner__toolbar">
+    <h1>Agenda</h1>
+    <div class="planner__nav">
+      <button type="button" class="planner__nav-btn" (click)="prevDay()" aria-label="Día anterior">‹</button>
+      <button type="button" class="planner__today-btn" (click)="goToday()" [disabled]="isToday()">Hoy</button>
+      <button type="button" class="planner__nav-btn" (click)="nextDay()" aria-label="Día siguiente">›</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p>Cargando…</p>
+  } @else if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  } @else {
+    <div class="planner__layout">
+      <nav class="planner__months" aria-label="Calendario del año">
+        @for (month of monthsOfYear(); track month.date.getTime()) {
+          <div
+            class="planner__mini-month"
+            [id]="'planner-month-' + month.date.getMonth()"
+            [class.is-current-month]="month.date.getMonth() === selectedMonthIndex()"
+          >
+            <h3 class="planner__mini-month-title">{{ month.date | date: 'MMMM' }}</h3>
+
+            <div class="planner__mini-row planner__mini-row--header">
+              @for (weekday of weekdayLabels; track weekday.getTime()) {
+                <span>{{ weekday | date: 'EEEEE' }}</span>
+              }
+            </div>
+
+            @for (week of month.weeks; track $index) {
+              <div class="planner__mini-row">
+                @for (day of week; track day ? day.getTime() : $index) {
+                  @if (day) {
+                    <button
+                      type="button"
+                      class="planner__mini-day"
+                      [class.is-selected]="isSelectedDay(day)"
+                      [class.is-today]="isTodayDate(day)"
+                      [class.has-content]="dayHasContent(day)"
+                      [attr.aria-current]="isSelectedDay(day) ? 'date' : null"
+                      (click)="selectDate(day)"
+                    >
+                      {{ day | date: 'd' }}
+                    </button>
+                  } @else {
+                    <span class="planner__mini-day planner__mini-day--empty" aria-hidden="true"></span>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </nav>
+
+      <div class="planner__main">
+        <div class="planner__book">
+          <div class="planner__spiral" aria-hidden="true">
+            @for (hole of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track hole) {
+              <span></span>
+            }
+          </div>
+
+          <div class="planner__page">
+            <div class="planner__page-head">
+              <div class="planner__date-block">
+                <span class="planner__day-num">{{ selectedDate() | date: 'd' }}</span>
+                <div class="planner__date-text">
+                  <span class="planner__weekday">{{ selectedDate() | date: 'EEEE' }}</span>
+                  <span class="planner__month-year">{{ selectedDate() | date: 'MMMM y' }}</span>
+                </div>
+              </div>
+              @if (isToday()) {
+                <span class="planner__today-flag">Hoy</span>
+              }
+            </div>
+
+            <div class="planner__section">
+              <h2 class="planner__section-title">Checklist</h2>
+              @if (checklistForSelectedDay().length > 0) {
+                <ul class="planner__checklist">
+                  @for (item of checklistForSelectedDay(); track item.id) {
+                    <li class="planner__checklist-item" [class.is-done]="item.done">
+                      <label class="planner__checkbox">
+                        <input type="checkbox" [checked]="item.done" (change)="toggleChecklistItem(item)" />
+                        <span class="planner__checkbox-box" aria-hidden="true"></span>
+                        <span class="planner__checklist-text">{{ item.text }}</span>
+                      </label>
+                      <button
+                        type="button"
+                        class="planner__checklist-delete"
+                        aria-label="Eliminar elemento"
+                        (click)="deleteChecklistItem(item)"
+                      >
+                        ✕
+                      </button>
+                    </li>
+                  }
+                </ul>
+              }
+              <div class="planner__checklist-add">
+                <label class="visually-hidden" for="new-checklist-item">Nuevo elemento de checklist</label>
+                <input
+                  type="text"
+                  id="new-checklist-item"
+                  placeholder="Apuntar algo…"
+                  [ngModel]="newChecklistText()"
+                  (ngModelChange)="newChecklistText.set($event)"
+                  (keyup.enter)="addChecklistItem()"
+                />
+                <button type="button" (click)="addChecklistItem()">Añadir</button>
+              </div>
+            </div>
+
+            <div class="planner__section">
+              <h2 class="planner__section-title">Notas</h2>
+              <label class="visually-hidden" for="day-note">Nota del día</label>
+              <textarea
+                id="day-note"
+                class="planner__notes"
+                rows="4"
+                placeholder="Escribe algo sobre este día…"
+                [ngModel]="noteDraft()"
+                (ngModelChange)="onNoteInput($event)"
+                (blur)="onNoteBlur()"
+              ></textarea>
+            </div>
+
+            @if (tasksForSelectedDay().length > 0) {
+              <div class="planner__section">
+                <h2 class="planner__section-title">Tareas</h2>
+                <div class="planner__lines">
+                  @for (task of tasksForSelectedDay(); track task.taskId) {
+                    <div class="planner__entry" [class.planner__entry--overdue]="task.overdue">
+                      <span class="planner__entry-time">{{ task.dueAt | date: 'HH:mm' }}</span>
+                      <span class="planner__entry-title">{{ task.title }}</span>
+                      @if (task.overdue) {
+                        <span class="planner__entry-badge">Vencida</span>
+                      }
+                      <span class="planner__pending-workspace" [style.--ws-color]="workspaceColor(activeWorkspaceName())">
+                        {{ activeWorkspaceName() }}
+                      </span>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="planner__strip" role="tablist" aria-label="Selecciona un día">
+          @for (day of weekStrip(); track day.iso) {
+            <button
+              type="button"
+              role="tab"
+              class="planner__strip-day"
+              [class.is-selected]="isSelected(day)"
+              [attr.aria-selected]="isSelected(day)"
+              (click)="selectDate(day.date)"
+            >
+              <span class="planner__strip-weekday">{{ day.date | date: 'EEEEE' }}</span>
+              <span class="planner__strip-num">{{ day.date | date: 'd' }}</span>
+              @if (day.hasTasks) {
+                <span class="planner__strip-dot" aria-hidden="true"></span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+
+      <div class="planner__right-rail">
+      <aside class="planner__meetings" aria-label="Reuniones">
+        <h2 class="planner__pending-title">Reuniones</h2>
+
+        @if (calendarErrorMessage()) {
+          <p class="planner__meetings-error">{{ calendarErrorMessage() }}</p>
+        }
+
+        @if (!calendarStatus()?.connected) {
+          <p class="planner__meetings-hint">Conecta tu Google Calendar para ver aquí tus reuniones de este día.</p>
+          <button type="button" class="planner__meetings-connect" (click)="connectGoogleCalendar()">
+            Conectar Google Calendar
+          </button>
+        } @else {
+          <div class="planner__meetings-account">
+            <span>{{ calendarStatus()?.email }}</span>
+            <button type="button" class="planner__meetings-disconnect" (click)="disconnectGoogleCalendar()">
+              Desconectar
+            </button>
+          </div>
+
+          @if (calendarLoading()) {
+            <p class="planner__pending-empty">Cargando…</p>
+          } @else if (calendarEvents().length === 0) {
+            <p class="planner__pending-empty">No tienes reuniones este día.</p>
+          } @else {
+            <ul class="planner__meeting-list">
+              @for (event of calendarEvents(); track event.id) {
+                <li [class]="'planner__meeting-item ' + meetingStatusClass(event)">
+                  <span class="planner__meeting-dot" [title]="meetingStatusLabel(event)" aria-hidden="true"></span>
+                  <div class="planner__meeting-card" [title]="meetingStatusLabel(event)">
+                    <div class="planner__meeting-header">
+                      <div class="planner__meeting-heading">
+                        <span class="planner__meeting-time">
+                          {{ event.allDay ? 'Todo el día' : (event.start | date: 'HH:mm') + '–' + (event.end | date: 'HH:mm') }}
+                        </span>
+                        <span class="planner__meeting-title">{{ event.title }}</span>
+                        @if (event.location) {
+                          <span class="planner__meeting-location">{{ event.location }}</span>
+                        }
+                      </div>
+                      <div class="planner__meeting-icons">
+                        @if (event.htmlLink) {
+                          <a
+                            class="planner__meeting-icon-btn"
+                            [href]="event.htmlLink"
+                            target="_blank"
+                            rel="noopener"
+                            title="Abrir en Google Calendar"
+                            aria-label="Abrir en Google Calendar"
+                          >
+                            ↗
+                          </a>
+                        }
+                        <button
+                          type="button"
+                          class="planner__meeting-icon-btn"
+                          [class.has-note]="hasMeetingNote(event.id)"
+                          [title]="hasMeetingNote(event.id) ? 'Ver notas' : 'Añadir notas'"
+                          [attr.aria-label]="hasMeetingNote(event.id) ? 'Ver notas' : 'Añadir notas'"
+                          (click)="openMeetingNotes(event)"
+                        >
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3.5" y="2.5" width="12" height="18" rx="1.8"></rect>
+                            <line x1="6.5" y1="7.5" x2="12.5" y2="7.5"></line>
+                            <line x1="6.5" y1="11" x2="12.5" y2="11"></line>
+                            <path d="M14 16.5 L19.5 11 L21.5 13 L16 18.5 L13.5 19 Z"></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              }
+            </ul>
+          }
+        }
+      </aside>
+
+      <aside class="planner__pending" aria-label="Pendientes">
+        <h2 class="planner__pending-title">Pendientes</h2>
+
+        <div class="planner__pending-section">
+          <h3>Tareas</h3>
+          @if (pendingTasks().length === 0) {
+            <p class="planner__pending-empty">No tienes tareas pendientes.</p>
+          } @else {
+            <ul class="planner__pending-list">
+              @for (entry of pendingTasks(); track entry.task.taskId) {
+                <li>
+                  <button type="button" class="planner__pending-row" (click)="selectDate(taskDueDate(entry.task))">
+                    <span class="planner__pending-date">{{ entry.task.dueAt | date: 'd MMM' }}</span>
+                    <span class="planner__pending-text" [class.is-overdue]="entry.task.overdue">{{ entry.task.title }}</span>
+                    <span class="planner__pending-workspace" [style.--ws-color]="workspaceColor(entry.workspaceName)">
+                      {{ entry.workspaceName }}
+                    </span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="planner__pending-section">
+          <h3>Checklist</h3>
+          @if (pendingChecklistItems().length === 0) {
+            <p class="planner__pending-empty">No tienes elementos de checklist pendientes.</p>
+          } @else {
+            <ul class="planner__pending-list">
+              @for (item of pendingChecklistItems(); track item.id) {
+                <li class="planner__pending-checklist-row">
+                  <label class="planner__checkbox planner__checkbox--pending">
+                    <input type="checkbox" [checked]="item.done" (change)="toggleChecklistItem(item)" />
+                    <span class="planner__checkbox-box" aria-hidden="true"></span>
+                  </label>
+                  <button type="button" class="planner__pending-row" (click)="selectDate(dateFromKey(item.date))">
+                    <span class="planner__pending-date">{{ dateFromKey(item.date) | date: 'd MMM' }}</span>
+                    <span class="planner__pending-text">{{ item.text }}</span>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </aside>
+      </div>
+    </div>
+  }
+
+  @if (activeMeetingNote(); as activeMeeting) {
+    <div class="planner__modal-backdrop" (click)="closeMeetingNotes()">
+      <div class="planner__modal" (click)="$event.stopPropagation()">
+        <div class="planner__modal-header">
+          <div class="planner__modal-heading">
+            <h2 class="planner__modal-title">{{ activeMeeting.title }}</h2>
+            <span class="planner__modal-time">
+              {{ activeMeeting.allDay ? 'Todo el día' : (activeMeeting.start | date: 'HH:mm') + '–' + (activeMeeting.end | date: 'HH:mm') }}
+            </span>
+          </div>
+          <button type="button" class="planner__modal-close" aria-label="Cerrar" (click)="closeMeetingNotes()">✕</button>
+        </div>
+
+        <label class="visually-hidden" [for]="'modal-meeting-note-' + activeMeeting.id">Nota de la reunión</label>
+        <textarea
+          [id]="'modal-meeting-note-' + activeMeeting.id"
+          class="planner__modal-note"
+          rows="8"
+          placeholder="Notas de esta reunión…"
+          [ngModel]="meetingNoteFor(activeMeeting.id)"
+          (ngModelChange)="onMeetingNoteInput(activeMeeting.id, $event)"
+          (blur)="onMeetingNoteBlur(activeMeeting.id)"
+        ></textarea>
+
+        <div class="planner__meeting-actions">
+          <button
+            type="button"
+            class="planner__meeting-generate"
+            [disabled]="generatingEventId() === activeMeeting.id"
+            (click)="generateFromMeeting(activeMeeting)"
+          >
+            {{ generatingEventId() === activeMeeting.id ? 'Generando…' : 'Generar con IA' }}
+          </button>
+          @if (generateMessageFor(activeMeeting.id)) {
+            <span class="planner__meeting-generate-msg">{{ generateMessageFor(activeMeeting.id) }}</span>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

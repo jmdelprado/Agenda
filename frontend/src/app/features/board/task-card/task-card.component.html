@@ -1,0 +1,67 @@
+<div class="task-card" cdkDrag [cdkDragData]="task">
+  @if (!editing()) {
+    <div class="task-card__view" [class.task-card__view--completed]="task.completed">
+      @if (task.overdue) {
+        <span class="task-card__badge task-card__badge--overdue">Vencida</span>
+      }
+      <p class="task-card__title">{{ task.title }}</p>
+      @if (task.description) {
+        <p class="task-card__description">{{ task.description }}</p>
+      }
+      @if (task.dueAt) {
+        <p class="task-card__due-date" [class.task-card__due-date--overdue]="task.overdue">
+          Vence: {{ task.dueAt | date: 'short' }}
+        </p>
+      }
+      <div class="task-card__actions">
+        <button type="button" (click)="startEdit()">Editar</button>
+        <button type="button" (click)="startDueDateEdit()">Fecha límite</button>
+        <button type="button" (click)="delete()">Eliminar</button>
+      </div>
+      @if (editingDueDate()) {
+        <div class="task-card__due-date-edit">
+          <label>
+            Fecha límite
+            <input type="datetime-local" [ngModel]="draftDueAt()" (ngModelChange)="draftDueAt.set($event)" />
+          </label>
+          <label>
+            Antelación del recordatorio (minutos)
+            <input
+              type="number"
+              min="0"
+              [ngModel]="draftReminderLeadMinutes()"
+              (ngModelChange)="draftReminderLeadMinutes.set($event)"
+              placeholder="1440 (24h) por defecto"
+            />
+          </label>
+          @if (dueDateErrorMessage()) {
+            <p class="task-card__error">{{ dueDateErrorMessage() }}</p>
+          }
+          <div class="task-card__actions">
+            <button type="button" (click)="saveDueDate()">Guardar</button>
+            @if (task.dueAt) {
+              <button type="button" (click)="clearDueDate()">Quitar fecha límite</button>
+            }
+            <button type="button" (click)="cancelDueDateEdit()">Cancelar</button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="task-card__edit">
+      <input type="text" [ngModel]="draftTitle()" (ngModelChange)="draftTitle.set($event)" placeholder="Título" />
+      <textarea
+        [ngModel]="draftDescription()"
+        (ngModelChange)="draftDescription.set($event)"
+        placeholder="Descripción (opcional)"
+      ></textarea>
+      @if (errorMessage()) {
+        <p class="task-card__error">{{ errorMessage() }}</p>
+      }
+      <div class="task-card__actions">
+        <button type="button" (click)="saveEdit()">Guardar</button>
+        <button type="button" (click)="cancelEdit()">Cancelar</button>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,62 @@
+<div class="workspace-tabs" role="tablist" aria-label="Espacios de trabajo">
+  @if (errorMessage()) {
+    <span class="workspace-tabs__error" role="alert">{{ errorMessage() }}</span>
+  }
+
+  @if (!loading()) {
+    @for (workspace of workspaces(); track workspace.id) {
+      <div class="workspace-tabs__tab" [class.workspace-tabs__tab--active]="isActive(workspace)">
+        @if (renamingId() === workspace.id) {
+          <label class="visually-hidden" [attr.for]="'rename-' + workspace.id">Nuevo nombre para {{ workspace.name }}</label>
+          <input
+            class="workspace-tabs__rename-input"
+            type="text"
+            [id]="'rename-' + workspace.id"
+            [attr.aria-label]="'Nuevo nombre para ' + workspace.name"
+            [ngModel]="renameValue()"
+            (ngModelChange)="renameValue.set($event)"
+            (keyup.enter)="confirmRename(workspace)"
+            (keyup.escape)="cancelRenaming()"
+            autofocus
+          />
+          <button type="button" aria-label="Guardar nombre" title="Guardar" (click)="confirmRename(workspace)">✓</button>
+          <button type="button" aria-label="Cancelar renombrado" title="Cancelar" (click)="cancelRenaming()">✕</button>
+        } @else {
+          <button
+            type="button"
+            role="tab"
+            class="workspace-tabs__tab-name"
+            [attr.aria-selected]="isActive(workspace)"
+            (click)="select(workspace)"
+          >
+            {{ workspace.name }}
+          </button>
+          <button type="button" class="workspace-tabs__icon-btn" [attr.aria-label]="'Renombrar ' + workspace.name" title="Renombrar" (click)="startRenaming(workspace)">✎</button>
+          <button type="button" class="workspace-tabs__icon-btn" [attr.aria-label]="'Eliminar ' + workspace.name" title="Eliminar" (click)="remove(workspace)">🗑</button>
+        }
+      </div>
+    }
+
+    @if (creating()) {
+      <div class="workspace-tabs__tab workspace-tabs__tab--new">
+        <label class="visually-hidden" for="new-workspace-name">Nombre del nuevo espacio de trabajo</label>
+        <input
+          class="workspace-tabs__rename-input"
+          type="text"
+          id="new-workspace-name"
+          placeholder="Nombre del cliente/proyecto"
+          aria-label="Nombre del nuevo espacio de trabajo"
+          [ngModel]="newWorkspaceName()"
+          (ngModelChange)="newWorkspaceName.set($event)"
+          (keyup.enter)="confirmCreate()"
+          (keyup.escape)="cancelCreating()"
+          autofocus
+        />
+        <button type="button" aria-label="Crear espacio de trabajo" title="Crear" (click)="confirmCreate()">✓</button>
+        <button type="button" aria-label="Cancelar creación" title="Cancelar" (click)="cancelCreating()">✕</button>
+      </div>
+    } @else {
+      <button type="button" class="workspace-tabs__add-btn" (click)="startCreating()">+ Nuevo espacio</button>
+    }
+  }
+</div>

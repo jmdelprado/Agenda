@@ -1,0 +1,13 @@
+package com.agenda.kanban.calendar.infrastructure.out.persistence;
+
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SpringDataGoogleCalendarConnectionJpaRepository
+        extends JpaRepository<GoogleCalendarConnectionJpaEntity, UUID> {
+
+    Optional<GoogleCalendarConnectionJpaEntity> findByUserId(UUID userId);
+
+    void deleteByUserId(UUID userId);
+}

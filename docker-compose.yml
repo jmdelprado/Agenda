@@ -1,0 +1,22 @@
+services:
+  db:
+    image: postgres:16
+    container_name: kanban-agenda-db
+    environment:
+      POSTGRES_DB: kanban_agenda
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+    ports:
+      - "5432:5432"
+    volumes:
+      - kanban-agenda-db-data:/var/lib/postgresql/data
+
+  smtp:
+    image: mailhog/mailhog
+    container_name: kanban-agenda-smtp
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  kanban-agenda-db-data:

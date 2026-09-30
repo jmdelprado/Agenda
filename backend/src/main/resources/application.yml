@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: kanban-agenda-backend
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:kanban_agenda}
+    username: ${DB_USER:app}
+    password: ${DB_PASSWORD:app}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  mail:
+    host: ${SMTP_HOST:localhost}
+    port: ${SMTP_PORT:1025}
+    username: ${SMTP_USER:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:false}
+          starttls:
+            enable: ${SMTP_STARTTLS:false}
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /
+
+app:
+  cors:
+    allowed-origin: ${FRONTEND_ORIGIN:http://localhost:4200}
+  jwt:
+    secret: ${JWT_SECRET:dev-only-secret-change-me-please-change-me-32bytes-min}
+    access-token-expiration-minutes: ${JWT_ACCESS_EXPIRATION_MINUTES:15}
+    refresh-token-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
+  reminder:
+    default-lead-minutes: 1440
+    dispatch-fixed-delay-ms: ${REMINDER_DISPATCH_FIXED_DELAY_MS:60000}
+  google:
+    client-id: ${GOOGLE_CLIENT_ID:}
+    client-secret: ${GOOGLE_CLIENT_SECRET:}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/api/v1/calendar/google/callback}
+    frontend-redirect-base: ${FRONTEND_ORIGIN:http://localhost:4200}
+    scope: https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/userinfo.email
+  gemini:
+    api-key: ${GEMINI_API_KEY:}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs

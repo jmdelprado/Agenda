@@ -1,0 +1,22 @@
+@if (isAuthenticated()) {
+  <header class="app-header">
+    <a routerLink="/agenda" class="app-header__brand" aria-label="Ir a la agenda">
+      <span class="app-header__mark" aria-hidden="true">
+        <span></span><span></span><span></span>
+      </span>
+      <span class="app-header__wordmark">Agenda</span>
+    </a>
+
+    <nav class="app-header__nav">
+      <a routerLink="/agenda" routerLinkActive="is-active">Agenda</a>
+      <a routerLink="/board" routerLinkActive="is-active">Tablero</a>
+    </nav>
+
+    <div class="app-header__actions">
+      <app-notifications-panel />
+      <button type="button" class="app-header__logout" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+  <app-workspace-tabs />
+}
+<router-outlet />

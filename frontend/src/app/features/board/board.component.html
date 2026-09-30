@@ -1,0 +1,65 @@
+<div class="board-page">
+  <h1>Tablero</h1>
+
+  @if (errorMessage()) {
+    <p class="board-page__error">{{ errorMessage() }}</p>
+  }
+
+  @if (loading()) {
+    <p>Cargando tablero…</p>
+  } @else if (board()) {
+    <div class="board">
+      @for (column of board()!.columns; track column.id) {
+        <div class="board__column" role="group" [attr.aria-label]="'Columna ' + column.name">
+          <div class="board__column-header">
+            <h2>{{ column.name }}</h2>
+            <app-column-manager [column]="column" (changed)="reload()" />
+          </div>
+
+          <div
+            class="board__task-list"
+            cdkDropList
+            [id]="dropListId(column.id)"
+            [cdkDropListData]="column.tasks"
+            [cdkDropListConnectedTo]="dropListIds()"
+            (cdkDropListDropped)="onDrop($event, column.id)"
+            role="list"
+            [attr.aria-label]="'Tarjetas de ' + column.name"
+          >
+            @for (task of column.tasks; track task.id) {
+              <app-task-card [task]="task" (changed)="reload()" />
+            }
+          </div>
+
+          <div class="board__add-task">
+            <label class="visually-hidden" [attr.for]="'new-task-' + column.id">Nueva tarjeta en {{ column.name }}</label>
+            <input
+              type="text"
+              [id]="'new-task-' + column.id"
+              placeholder="Nueva tarjeta…"
+              [attr.aria-label]="'Nueva tarjeta en ' + column.name"
+              [ngModel]="newTaskTitleFor(column.id)"
+              (ngModelChange)="setNewTaskTitle(column.id, $event)"
+              (keyup.enter)="addTask(column.id)"
+            />
+            <button type="button" (click)="addTask(column.id)">Añadir</button>
+          </div>
+        </div>
+      }
+
+      <div class="board__add-column">
+        <label class="visually-hidden" for="new-column-name">Nombre de la nueva columna</label>
+        <input
+          type="text"
+          id="new-column-name"
+          placeholder="Nueva columna…"
+          aria-label="Nombre de la nueva columna"
+          [ngModel]="newColumnName()"
+          (ngModelChange)="newColumnName.set($event)"
+          (keyup.enter)="addColumn()"
+        />
+        <button type="button" (click)="addColumn()">Añadir columna</button>
+      </div>
+    </div>
+  }
+</div>

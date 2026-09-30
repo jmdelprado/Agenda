@@ -1,0 +1,118 @@
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-left: 3px solid var(--col-color, var(--tab-1));
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.75rem;
+  box-shadow: var(--shadow-sm);
+  cursor: grab;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+}
+
+.task-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.task-card.cdk-drag-preview {
+  cursor: grabbing;
+}
+
+.task-card__view--completed .task-card__title {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.task-card__title {
+  margin: 0 0 0.25rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--ink-900);
+}
+
+.task-card__description {
+  margin: 0 0 0.5rem;
+  font-size: 0.83rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.task-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+
+.task-card__actions button {
+  font-size: 0.74rem;
+  font-weight: 500;
+  padding: 0.28rem 0.55rem;
+  color: var(--muted);
+  background: var(--surface-alt);
+  border-color: var(--border-soft);
+}
+
+.task-card__actions button:hover {
+  color: var(--ink-900);
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.task-card__edit input,
+.task-card__edit textarea {
+  width: 100%;
+  margin-bottom: 0.4rem;
+  font-size: 0.87rem;
+}
+
+.task-card__error {
+  color: var(--danger);
+  font-size: 0.78rem;
+  margin: 0.2rem 0;
+}
+
+.task-card__badge {
+  display: inline-block;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  padding: 0.14rem 0.45rem;
+  border-radius: 4px;
+  margin-bottom: 0.4rem;
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.task-card__due-date {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.task-card__due-date--overdue {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.task-card__due-date-edit {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.task-card__due-date-edit label {
+  display: block;
+  font-size: 0.76rem;
+  margin-bottom: 0.5rem;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.task-card__due-date-edit input {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+}

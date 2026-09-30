@@ -1,0 +1,309 @@
+/* ============================================================
+   Kanban Agenda — design tokens
+   Idea: an organizer's desk. Workspaces and board columns behave
+   like tabbed folders — a coloured index tab per item, papery
+   canvas, ink-navy structure, a marigold accent used sparingly.
+   ============================================================ */
+:root {
+  --ink-900: #10192b;
+  --ink-800: #182238;
+  --ink-700: #24314f;
+  --ink-500: #3f4f74;
+
+  --paper: #eef1f6;
+  --surface: #ffffff;
+  --surface-alt: #f7f8fb;
+
+  --accent: #e2a33b;
+  --accent-ink: #7a4e10;
+  --accent-soft: #fbe7c4;
+
+  --done: #2f7a56;
+  --done-soft: #dcf0e6;
+  --danger: #c1272d;
+  --danger-soft: #fadcdc;
+
+  --border: #dee2ec;
+  --border-soft: #e8ebf2;
+  --muted: #5b6472;
+  --text: #1a2333;
+
+  /* rotating "folder tab" palette — used for workspaces & columns alike */
+  --tab-1: #e2a33b;
+  --tab-1-soft: #fbe7c4;
+  --tab-2: #3c7a8c;
+  --tab-2-soft: #d8ebef;
+  --tab-3: #b25b6b;
+  --tab-3-soft: #f5dee2;
+  --tab-4: #5b7a4a;
+  --tab-4-soft: #e3ecdb;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --shadow-sm: 0 1px 2px rgba(16, 25, 43, 0.08);
+  --shadow-md: 0 6px 20px rgba(16, 25, 43, 0.1);
+  --shadow-lg: 0 16px 40px rgba(16, 25, 43, 0.18);
+
+  --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+  color-scheme: light;
+}
+
+/* ---------- reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--ink-900);
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 1.9rem;
+}
+
+h2 {
+  font-size: 1.15rem;
+}
+
+p {
+  margin: 0 0 0.75rem;
+  color: var(--text);
+}
+
+a {
+  color: var(--ink-700);
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink-900);
+}
+
+/* thin, warm scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c7cddc;
+  border-radius: 999px;
+}
+
+/* ---------- global focus ring ---------- */
+:focus-visible {
+  outline: 2px solid var(--ink-700);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- form controls (element-level, app-wide) ---------- */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="datetime-local"],
+input:not([type]),
+textarea,
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.7rem;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="number"]:hover,
+input[type="datetime-local"]:hover,
+textarea:hover,
+select:hover {
+  border-color: #c7cddc;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--ink-700);
+  box-shadow: 0 0 0 3px rgba(36, 49, 79, 0.12);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 4.5rem;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ---------- buttons (element-level default = quiet secondary) ---------- */
+button {
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--ink-700);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, transform 80ms ease, color 120ms ease;
+}
+
+button:hover:not(:disabled) {
+  border-color: #c7cddc;
+  background: var(--surface-alt);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* primary action = submit buttons across forms (login/register/etc.) */
+button[type="submit"] {
+  background: var(--ink-900);
+  border-color: var(--ink-900);
+  color: #fff;
+  padding: 0.6rem 1.1rem;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background: var(--ink-700);
+  border-color: var(--ink-700);
+}
+
+/* ---------- shared error text ---------- */
+.error {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.7rem;
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+}
+
+/* ============================================================
+   Auth pages (login / register) — no dedicated component CSS,
+   styled globally since `.auth-page` only appears there.
+   ============================================================ */
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  background:
+    radial-gradient(600px 300px at 15% -10%, rgba(226, 163, 59, 0.16), transparent),
+    var(--ink-900);
+}
+
+.auth-page::before {
+  content: "";
+}
+
+.auth-page h1 {
+  color: #fff;
+  font-size: 1.7rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.auth-page form {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.auth-page label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.auth-page input {
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: 0.95rem;
+}
+
+.auth-page button[type="submit"] {
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.auth-page > p {
+  margin-top: 1.25rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+}
+
+.auth-page > p a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-page > p a:hover {
+  text-decoration: underline;
+}
