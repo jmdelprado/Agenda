@@ -28,14 +28,22 @@ export const authRefreshInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       return authService.ensureFreshAccessToken().pipe(
+        // Solo se cierra sesión si el backend rechaza el refresh token. Un fallo de red, timeout
+        // o 5xx (p.ej. Render arrancando en frío) no invalida la sesión: se propaga el error
+        // original y el usuario conserva sus tokens para reintentar.
+        catchError((refreshError: unknown) => {
+          if (
+            refreshError instanceof HttpErrorResponse &&
+            (refreshError.status === 400 || refreshError.status === 401 || refreshError.status === 403)
+          ) {
+            authService.logout();
+            router.navigateByUrl('/login');
+          }
+          return throwError(() => error);
+        }),
         switchMap((accessToken) =>
           next(req.clone({ setHeaders: { Authorization: `Bearer ${accessToken}` } })),
         ),
-        catchError(() => {
-          authService.logout();
-          router.navigateByUrl('/login');
-          return throwError(() => error);
-        }),
       );
     }),
   );
