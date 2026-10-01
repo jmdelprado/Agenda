@@ -48,12 +48,22 @@ export class AuthService {
    * la primera si no se comparte la misma petición en curso. */
   private refreshInFlight$: Observable<RefreshResponse> | null = null;
 
+  /** Los teclados móviles capitalizan la primera letra y añaden espacios finales; el backend compara el email exacto. */
+  private normalizeEmail(email: string): string {
+    return email.trim().toLowerCase();
+  }
+
   register(email: string, password: string): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, { email, password });
+    return this.http.post<RegisterResponse>(`${this.baseUrl}/register`, {
+      email: this.normalizeEmail(email),
+      password,
+    });
   }
 
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
+    return this.http
+      .post<LoginResponse>(`${this.baseUrl}/login`, { email: this.normalizeEmail(email), password })
+      .pipe(
       tap((response) => this.storeTokens(response.accessToken, response.refreshToken)),
     );
   }

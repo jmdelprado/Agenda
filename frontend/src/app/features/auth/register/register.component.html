@@ -4,7 +4,15 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label>
       Email
-      <input type="email" formControlName="email" autocomplete="email" />
+      <input
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        inputmode="email"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
+      />
     </label>
 
     <label>

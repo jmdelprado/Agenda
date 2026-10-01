@@ -4,7 +4,15 @@
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <label>
       Email
-      <input type="email" formControlName="email" autocomplete="email" />
+      <input
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        inputmode="email"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
+      />
     </label>
 
     <label>
@@ -16,9 +24,27 @@
       <p class="error">{{ errorMessage() }}</p>
     }
 
-    <button type="submit" [disabled]="submitting()">
-      {{ submitting() ? 'Entrando…' : 'Entrar' }}
-    </button>
+    @if (waking()) {
+      <div class="wake-notice" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <div>
+          <strong>El servidor está arrancando…</strong>
+          <p>
+            Puede tardar hasta 3 minutos. Reintento {{ attempt() }} de 10 en
+            {{ retryCountdown() }} s.
+          </p>
+        </div>
+      </div>
+      <button type="button" class="link-button" (click)="cancelRetry()">Cancelar</button>
+    } @else {
+      <button type="submit" [disabled]="submitting()">
+        @if (submitting()) {
+          <span class="spinner spinner-sm" aria-hidden="true"></span> Entrando…
+        } @else {
+          Entrar
+        }
+      </button>
+    }
   </form>
 
   <p>¿No tienes cuenta? <a routerLink="/register">Regístrate</a></p>
